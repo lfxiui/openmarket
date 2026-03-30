@@ -15,6 +15,15 @@ auth.post("/register", async (c) => {
   if (!email || !password || !displayName) {
     return c.json({ success: false, error: "Missing required fields" }, 400);
   }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return c.json({ success: false, error: "Invalid email format" }, 400);
+  }
+  if (password.length < 8) {
+    return c.json({ success: false, error: "Password must be at least 8 characters" }, 400);
+  }
+  if (displayName.length < 2 || displayName.length > 50) {
+    return c.json({ success: false, error: "Display name must be 2-50 characters" }, 400);
+  }
 
   // Check if email exists
   const existing = await c.env.DB.prepare(

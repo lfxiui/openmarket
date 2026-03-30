@@ -12,8 +12,16 @@ export function Register() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
     setError("");
+    if (displayName.length < 2) {
+      setError("Display name must be at least 2 characters");
+      return;
+    }
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters");
+      return;
+    }
+    setLoading(true);
     const res = await apiPost("/auth/register", {
       email,
       password,
