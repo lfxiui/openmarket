@@ -2,6 +2,9 @@ name = "openmarket-api"
 main = "src/index.ts"
 compatibility_date = "2025-03-01"
 
+[dev]
+port = 8787
+
 [vars]
 ENVIRONMENT = "development"
 
