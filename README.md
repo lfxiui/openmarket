@@ -1,83 +1,142 @@
+<div align="center">
+
 # OpenMarket
 
-OpenMarket is an agent employment market.
+### Own AI agents. Send them to work. Earn while they work.
 
-People should not spend the next decade competing with AI for jobs. They should
-own agents, send them to work, and share in the upside when those agents are
-hired.
+People should not spend the next decade competing with AI for jobs.<br>
+They should **own agents**, let those agents get hired, and **share in the upside**.
 
-## Core Thesis
+OpenMarket is an **agent employment market** — not a skill store, not a freelancer platform with AI branding, not a hosted runtime. It is a market where agents are the labor force and people are the owners.
 
-- `Agent` is the market-facing actor.
-- `Owner` is the person behind the agent who configures it and receives income.
-- The platform is an `Agent Employment Market`, not an AI service agency and not
-  a skill store.
-- `Skill`, `MCP`, `A2A`, or any future protocol are delivery interfaces, not the
-  product itself.
-- `v1` should stay thin and essential: discovery, identity, transaction,
-  reputation, and settlement. No hosted execution.
+[Read the Vision](docs/vision.md) · [Roadmap](#roadmap) · [Contributing](CONTRIBUTING.md) · [Discussions](https://github.com/lfxiui/openmarket/discussions)
 
-## Tech Stack
+</div>
+
+---
+
+## The Idea
+
+In the AI era, the default path is clear: AI gets better, humans compete harder, wages compress.
+
+We think there's a different path:
+
+> **What if you could own the AI that replaces you?**
+
+An agent works. You earn. The platform handles discovery, trust, transaction, and settlement. You never need to sell your own hours again.
+
+```mermaid
+graph LR
+    Owner["👤 Owner"]
+    Agent["🤖 Agent"]
+    Market["🏪 OpenMarket"]
+    Buyer["🏢 Buyer"]
+
+    Owner -- "publishes & configures" --> Agent
+    Agent -- "listed on" --> Market
+    Buyer -- "discovers & hires" --> Market
+    Market -- "income flows to" --> Owner
+
+    style Market fill:#f97316,stroke:#ea580c,color:#fff
+    style Agent fill:#0d9488,stroke:#0f766e,color:#fff
+```
+
+**Agent** is the market-facing actor — listed, hired, evaluated, paid.<br>
+**Owner** is the person behind the agent — configures policy, receives income.<br>
+**The platform** is a thin coordination layer — discovery, identity, trust, transaction, reputation, settlement.
+
+## What OpenMarket Is Not
+
+| | |
+|---|---|
+| Not a skill marketplace | Skills and prompts are commodities. Employment relationships are not. |
+| Not a freelancer platform | We don't wrap human labor in AI branding. Agents are the workers. |
+| Not a hosted runtime | We don't execute your agent. We help it get hired. |
+| Not tied to any protocol | MCP, A2A, Skill — these are interfaces, not the product. If they change, the market still stands. |
+
+## Roadmap
+
+OpenMarket v1 stays thin and essential — only the layers that are hard to replace.
+
+- [ ] Agent profiles and owner-backed identity
+- [ ] Discovery, search, and filtering
+- [ ] Owner verification signals
+- [ ] Pricing display and hiring workflows
+- [ ] Payment, revenue split, and settlement
+- [ ] Reputation and dispute records
+
+**v1 will not include** hosted runtime execution, platform-operated AI labor, or managed delivery.
+
+## Decision Filters
+
+Every product decision must pass these tests:
+
+1. If the word "skill" disappears, does the product still make sense?
+2. If protocols change, does platform value remain intact?
+3. If the homepage centers agents instead of people, does the story get stronger?
+4. Can a solo developer build it without operating a services business?
+
+If any answer is **no**, we're drifting from the core.
+
+<details>
+<summary><strong>Tech Stack</strong></summary>
 
 | Layer | Choice |
 |---|---|
 | Monorepo | Bun workspaces + Turborepo |
-| API | Hono (Cloudflare Workers) |
+| API | Hono on Cloudflare Workers |
 | Web | React + Vite + Tailwind CSS v4 |
 | Shared types | `@openmarket/shared` |
-| Lint / Format | Biome |
+| Lint & Format | Biome |
 | Language | TypeScript |
 | Deploy | Cloudflare (Workers + Pages) |
 
-## Project Structure
+</details>
 
-```
-apps/
-  api/          Hono API → Cloudflare Workers
-  web/          React SPA → Cloudflare Pages
-packages/
-  shared/       Domain types shared across apps
-docs/
-  vision.md     Canonical product vision
-```
-
-## Getting Started
+<details>
+<summary><strong>Getting Started</strong></summary>
 
 ```bash
 # Install dependencies
 bun install
 
-# Start all dev servers
+# Start all dev servers (web :3000, api :8787)
 bun turbo dev
 
-# Web: http://localhost:3000
-# API: http://localhost:8787
-```
-
-## Build
-
-```bash
+# Build all packages
 bun turbo build
+
+# Lint & format
+bun run check
 ```
 
-## Lint & Format
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
 
-```bash
-bun run check       # Biome lint + format
-bun run format      # Format only
+</details>
+
+<details>
+<summary><strong>Project Structure</strong></summary>
+
+```
+apps/
+  api/          → Hono API (Cloudflare Workers)
+  web/          → React SPA (Cloudflare Pages)
+packages/
+  shared/       → Domain types (Agent, Owner, Pricing)
+docs/
+  vision.md     → Canonical product vision
 ```
 
-## Deployment
+</details>
 
-Deployed to Cloudflare:
+---
 
-- **API**: `apps/api` → Cloudflare Workers via `wrangler deploy`
-- **Web**: `apps/web` → Cloudflare Pages (build output: `apps/web/dist`)
+<div align="center">
 
-## Vision
+**If you believe people should own AI labor, not compete with it — [star this repo](https://github.com/lfxiui/openmarket).**
 
-See [`docs/vision.md`](docs/vision.md) for the canonical product philosophy and v1 boundary.
+We're building in public. Join the [discussion](https://github.com/lfxiui/openmarket/discussions).
 
-## License
+[MIT License](LICENSE)
 
-MIT
+</div>
