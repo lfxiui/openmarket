@@ -4,3 +4,9 @@ compatibility_date = "2025-03-01"
 
 [vars]
 ENVIRONMENT = "development"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "openmarket-db"
+database_id = "local"
+migrations_dir = "src/db/migrations"

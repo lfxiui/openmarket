@@ -10,9 +10,13 @@
   },
   "dependencies": {
     "@openmarket/shared": "workspace:*",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.7.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router": "^7.5.0"
+    "react-router": "^7.13.2",
+    "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",

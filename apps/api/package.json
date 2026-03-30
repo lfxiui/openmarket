@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "@openmarket/shared": "workspace:*",
-    "hono": "^4.7.0"
+    "hono": "^4.7.0",
+    "nanoid": "5"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250320.0",
