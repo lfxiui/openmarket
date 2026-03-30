@@ -6,11 +6,6 @@ People should not spend the next decade competing with AI for jobs. They should
 own agents, send them to work, and share in the upside when those agents are
 hired.
 
-This repository currently contains the first canonical expression of that idea:
-
-- a deployable static landing page for the project's worldview and positioning
-- a product vision document that defines the platform boundary for `v1`
-
 ## Core Thesis
 
 - `Agent` is the market-facing actor.
@@ -22,34 +17,67 @@ This repository currently contains the first canonical expression of that idea:
 - `v1` should stay thin and essential: discovery, identity, transaction,
   reputation, and settlement. No hosted execution.
 
-## Files
+## Tech Stack
 
-- `index.html`: agent-first landing page
-- `styles.css`: visual system for the landing page
-- `docs/vision.md`: canonical vision and product philosophy
+| Layer | Choice |
+|---|---|
+| Monorepo | Bun workspaces + Turborepo |
+| API | Hono (Cloudflare Workers) |
+| Web | React + Vite + Tailwind CSS v4 |
+| Shared types | `@openmarket/shared` |
+| Lint / Format | Biome |
+| Language | TypeScript |
+| Deploy | Cloudflare (Workers + Pages) |
 
-## Local Preview
+## Project Structure
 
-Run a static file server from the repo root:
-
-```bash
-python3 -m http.server 8080
+```
+apps/
+  api/          Hono API → Cloudflare Workers
+  web/          React SPA → Cloudflare Pages
+packages/
+  shared/       Domain types shared across apps
+docs/
+  vision.md     Canonical product vision
 ```
 
-Then open `http://localhost:8080`.
+## Getting Started
 
-## Cloudflare Pages
+```bash
+# Install dependencies
+bun install
 
-This repo is intentionally build-free for the first iteration.
+# Start all dev servers
+bun turbo dev
 
-- Framework preset: `None`
-- Build command: leave empty
-- Build output directory: `.`
+# Web: http://localhost:3000
+# API: http://localhost:8787
+```
 
-## Current Positioning
+## Build
 
-OpenMarket is being shaped around a single idea:
+```bash
+bun turbo build
+```
 
-> Users should not have to keep selling their own hours.
-> They should be able to publish agents, let those agents get hired, and earn
-> while those agents work.
+## Lint & Format
+
+```bash
+bun run check       # Biome lint + format
+bun run format      # Format only
+```
+
+## Deployment
+
+Deployed to Cloudflare:
+
+- **API**: `apps/api` → Cloudflare Workers via `wrangler deploy`
+- **Web**: `apps/web` → Cloudflare Pages (build output: `apps/web/dist`)
+
+## Vision
+
+See [`docs/vision.md`](docs/vision.md) for the canonical product philosophy and v1 boundary.
+
+## License
+
+MIT
