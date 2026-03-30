@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { apiPost } from "../lib/utils";
+import { apiPost, saveSession } from "../lib/utils";
+import { Button } from "../components/ui/Button";
+import { Input } from "../components/ui/Input";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/Card";
 
 export function Login() {
   const navigate = useNavigate();
@@ -13,9 +16,13 @@ export function Login() {
     e.preventDefault();
     setLoading(true);
     setError("");
-    const res = await apiPost("/auth/login", { email, password });
+    const res = await apiPost<{ owner: unknown; token: string }>(
+      "/auth/login",
+      { email, password },
+    );
     setLoading(false);
-    if (res.success) {
+    if (res.success && res.data?.token) {
+      saveSession(res.data.token);
       navigate("/dashboard");
     } else {
       setError(res.error || "Login failed");
@@ -23,52 +30,50 @@ export function Login() {
   }
 
   return (
-    <main className="mx-auto max-w-sm px-6 py-20">
-      <h1 className="text-2xl font-bold">Sign in</h1>
-      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-        {error && (
-          <p className="rounded-md bg-red-50 p-3 text-sm text-red-600">
-            {error}
+    <main className="flex min-h-[calc(100vh-57px)] items-center justify-center px-6">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle className="text-xl">Sign in</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="rounded-md bg-red-50 p-3 text-sm text-red-600">
+                {error}
+              </div>
+            )}
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">Email</label>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">Password</label>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Your password"
+                required
+              />
+            </div>
+            <Button type="submit" disabled={loading} className="w-full">
+              {loading ? "Signing in..." : "Sign in"}
+            </Button>
+          </form>
+          <p className="mt-4 text-center text-sm text-stone-500">
+            Don't have an account?{" "}
+            <Link to="/register" className="text-orange-500 hover:underline">
+              Register
+            </Link>
           </p>
-        )}
-        <div>
-          <label className="block text-sm font-medium text-stone-700">
-            Email
-          </label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="mt-1 w-full rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-stone-700">
-            Password
-          </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="mt-1 w-full rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-md bg-orange-500 px-4 py-2 font-medium text-white hover:bg-orange-600 disabled:opacity-50"
-        >
-          {loading ? "Signing in..." : "Sign in"}
-        </button>
-      </form>
-      <p className="mt-4 text-center text-sm text-stone-500">
-        Don't have an account?{" "}
-        <Link to="/register" className="text-orange-500 hover:underline">
-          Register
-        </Link>
-      </p>
+        </CardContent>
+      </Card>
     </main>
   );
 }

@@ -7,12 +7,23 @@ export function cn(...inputs: ClassValue[]) {
 
 const API_BASE = "/api";
 
+function getAuthHeaders(): Record<string, string> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  const token = localStorage.getItem("session_token");
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  return headers;
+}
+
 export async function api<T>(
   path: string,
   options?: RequestInit,
 ): Promise<{ success: boolean; data?: T; error?: string }> {
   const res = await fetch(`${API_BASE}${path}`, {
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     credentials: "include",
     ...options,
   });
@@ -27,4 +38,16 @@ export async function apiPost<T>(
     method: "POST",
     body: JSON.stringify(body),
   });
+}
+
+export function saveSession(token: string) {
+  localStorage.setItem("session_token", token);
+}
+
+export function clearSession() {
+  localStorage.removeItem("session_token");
+}
+
+export function hasSession(): boolean {
+  return !!localStorage.getItem("session_token");
 }

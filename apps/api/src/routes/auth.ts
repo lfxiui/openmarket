@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { setCookie, deleteCookie, getCookie } from "hono/cookie";
 import type { AppEnv } from "../types";
 import { hashApiKey } from "../middleware/auth";
 import { ownerId, walletId, sessionId } from "../lib/id";
@@ -19,13 +20,18 @@ auth.post("/register", async (c) => {
     return c.json({ success: false, error: "Invalid email format" }, 400);
   }
   if (password.length < 8) {
-    return c.json({ success: false, error: "Password must be at least 8 characters" }, 400);
+    return c.json(
+      { success: false, error: "Password must be at least 8 characters" },
+      400,
+    );
   }
   if (displayName.length < 2 || displayName.length > 50) {
-    return c.json({ success: false, error: "Display name must be 2-50 characters" }, 400);
+    return c.json(
+      { success: false, error: "Display name must be 2-50 characters" },
+      400,
+    );
   }
 
-  // Check if email exists
   const existing = await c.env.DB.prepare(
     `SELECT id FROM owners WHERE email = ?`,
   )
@@ -35,7 +41,6 @@ auth.post("/register", async (c) => {
     return c.json({ success: false, error: "Email already registered" }, 409);
   }
 
-  // Hash password using Web Crypto (available in Workers)
   const passwordHash = await hashPassword(password);
   const id = ownerId();
   const wId = walletId();
@@ -52,7 +57,6 @@ auth.post("/register", async (c) => {
     ).bind(wId, id, now, now),
   ]);
 
-  // Create session
   const { token, tokenHash, expiresAt } = await createSessionToken();
   const sId = sessionId();
   await c.env.DB.prepare(
@@ -60,12 +64,13 @@ auth.post("/register", async (c) => {
      VALUES (?, ?, ?, ?, ?)`,
   ).bind(sId, id, tokenHash, expiresAt, now);
 
-  setCookie(c, token, expiresAt);
+  setSessionCookie(c, token, new Date(expiresAt));
 
   return c.json({
     success: true,
     data: {
       owner: { id, email: email.toLowerCase(), displayName, verified: false },
+      token,
     },
   });
 });
@@ -105,7 +110,7 @@ auth.post("/login", async (c) => {
      VALUES (?, ?, ?, ?, ?)`,
   ).bind(sId, owner.id, tokenHash, expiresAt, now);
 
-  setCookie(c, token, expiresAt);
+  setSessionCookie(c, token, new Date(expiresAt));
 
   return c.json({
     success: true,
@@ -117,22 +122,20 @@ auth.post("/login", async (c) => {
         avatarUrl: owner.avatar_url,
         verified: owner.verified === 1,
       },
+      token,
     },
   });
 });
 
 auth.post("/logout", async (c) => {
-  const sessionToken = getCookieValue(c, "session");
+  const sessionToken = getCookie(c, "session");
   if (sessionToken) {
     const tokenHash = await hashApiKey(sessionToken);
     await c.env.DB.prepare(`DELETE FROM sessions WHERE token_hash = ?`)
       .bind(tokenHash)
       .run();
   }
-  c.header(
-    "Set-Cookie",
-    `session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`,
-  );
+  deleteCookie(c, "session", { path: "/" });
   return c.json({ success: true });
 });
 
@@ -175,8 +178,17 @@ auth.get("/me", async (c) => {
 });
 
 // ============================================================
-// Password helpers using Web Crypto (Cloudflare Workers compatible)
+// Helpers
 // ============================================================
+
+function setSessionCookie(c: Parameters<typeof setCookie>[0], token: string, expires: Date) {
+  setCookie(c, "session", token, {
+    path: "/",
+    httpOnly: true,
+    sameSite: "Lax",
+    expires,
+  });
+}
 
 async function hashPassword(password: string): Promise<string> {
   const salt = crypto.getRandomValues(new Uint8Array(16));
@@ -239,23 +251,6 @@ async function createSessionToken(): Promise<{
   const tokenHash = await hashApiKey(token);
   const expiresAt = new Date(
     Date.now() + 30 * 24 * 60 * 60 * 1000,
-  ).toISOString(); // 30 days
+  ).toISOString();
   return { token, tokenHash, expiresAt };
-}
-
-function setCookie(c: { header: (k: string, v: string) => void }, token: string, expiresAt: string) {
-  c.header(
-    "Set-Cookie",
-    `session=${token}; Path=/; HttpOnly; SameSite=Lax; Expires=${new Date(expiresAt).toUTCString()}`,
-  );
-}
-
-function getCookieValue(
-  c: { req: { header: (k: string) => string | undefined } },
-  name: string,
-): string | undefined {
-  const cookieHeader = c.req.header("Cookie");
-  if (!cookieHeader) return undefined;
-  const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${name}=([^;]*)`));
-  return match ? decodeURIComponent(match[1]) : undefined;
 }

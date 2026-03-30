@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
-import { api, apiPost } from "../lib/utils";
+import { Link, useNavigate } from "react-router";
+import { api, apiPost, hasSession, clearSession } from "../lib/utils";
+import { Button } from "../components/ui/Button";
+import { Card, CardContent } from "../components/ui/Card";
 
 interface WalletData {
   balance: number;
@@ -9,24 +11,20 @@ interface WalletData {
   totalSpent: number;
 }
 
-interface AgentData {
-  id: string;
-  name: string;
-  status: string;
-  totalTransactions: number;
-  totalEarnings: number;
-}
-
 export function Dashboard() {
+  const navigate = useNavigate();
   const [owner, setOwner] = useState<{
     displayName: string;
     email: string;
   } | null>(null);
   const [wallet, setWallet] = useState<WalletData | null>(null);
-  const [agents, setAgents] = useState<AgentData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!hasSession()) {
+      setLoading(false);
+      return;
+    }
     Promise.all([
       api<{ owner: { displayName: string; email: string } }>("/auth/me"),
       api<WalletData>("/wallet"),
@@ -47,7 +45,7 @@ export function Dashboard() {
 
   if (!owner) {
     return (
-      <main className="mx-auto max-w-5xl px-6 py-20">
+      <main className="mx-auto max-w-5xl px-6 py-20 text-center">
         <h1 className="text-2xl font-bold">Not signed in</h1>
         <p className="mt-2 text-stone-500">
           <Link to="/login" className="text-orange-500 hover:underline">
@@ -61,56 +59,80 @@ export function Dashboard() {
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
-      <h1 className="text-2xl font-bold">
-        Welcome, {owner.displayName}
-      </h1>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <p className="text-sm text-stone-500">
+            Welcome back, {owner.displayName}
+          </p>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            clearSession();
+            apiPost("/auth/logout", {});
+            navigate("/");
+          }}
+        >
+          Sign out
+        </Button>
+      </div>
 
       {/* Wallet */}
-      <div className="mt-8 grid gap-4 md:grid-cols-4">
-        <div className="rounded-xl border border-stone-200 bg-white p-5">
-          <p className="text-sm text-stone-500">Balance</p>
-          <p className="text-2xl font-bold text-orange-500">
-            {wallet?.balance ?? 0}
-          </p>
-          <p className="text-xs text-stone-400">credits</p>
-        </div>
-        <div className="rounded-xl border border-stone-200 bg-white p-5">
-          <p className="text-sm text-stone-500">In Escrow</p>
-          <p className="text-2xl font-bold">{wallet?.frozen ?? 0}</p>
-          <p className="text-xs text-stone-400">credits</p>
-        </div>
-        <div className="rounded-xl border border-stone-200 bg-white p-5">
-          <p className="text-sm text-stone-500">Total Earned</p>
-          <p className="text-2xl font-bold text-teal-600">
-            {wallet?.totalEarned ?? 0}
-          </p>
-          <p className="text-xs text-stone-400">credits</p>
-        </div>
-        <div className="rounded-xl border border-stone-200 bg-white p-5">
-          <p className="text-sm text-stone-500">Total Spent</p>
-          <p className="text-2xl font-bold">{wallet?.totalSpent ?? 0}</p>
-          <p className="text-xs text-stone-400">credits</p>
-        </div>
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardContent className="p-5">
+            <p className="text-sm text-stone-500">Balance</p>
+            <p className="mt-1 text-3xl font-bold text-orange-500">
+              {(wallet?.balance ?? 0).toLocaleString()}
+            </p>
+            <p className="text-xs text-stone-400">credits</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-5">
+            <p className="text-sm text-stone-500">In Escrow</p>
+            <p className="mt-1 text-3xl font-bold">
+              {(wallet?.frozen ?? 0).toLocaleString()}
+            </p>
+            <p className="text-xs text-stone-400">credits</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-5">
+            <p className="text-sm text-stone-500">Total Earned</p>
+            <p className="mt-1 text-3xl font-bold text-teal-600">
+              {(wallet?.totalEarned ?? 0).toLocaleString()}
+            </p>
+            <p className="text-xs text-stone-400">credits</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-5">
+            <p className="text-sm text-stone-500">Total Spent</p>
+            <p className="mt-1 text-3xl font-bold">
+              {(wallet?.totalSpent ?? 0).toLocaleString()}
+            </p>
+            <p className="text-xs text-stone-400">credits</p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Actions */}
       <div className="mt-8 flex gap-3">
-        <Link
-          to="/dashboard/agents/new"
-          className="rounded-lg bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600"
-        >
-          Create agent
-        </Link>
-        <button
-          type="button"
+        <Button asChild>
+          <Link to="/dashboard/agents/new">Create agent</Link>
+        </Button>
+        <Button
+          variant="secondary"
           onClick={async () => {
             await apiPost("/wallet/topup", { amount: 10000 });
             window.location.reload();
           }}
-          className="rounded-lg border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:bg-stone-100"
         >
           Add 10,000 credits (dev)
-        </button>
+        </Button>
       </div>
     </main>
   );
