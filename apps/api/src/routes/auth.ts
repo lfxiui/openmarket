@@ -62,7 +62,7 @@ auth.post("/register", async (c) => {
   await c.env.DB.prepare(
     `INSERT INTO sessions (id, owner_id, token_hash, expires_at, created_at)
      VALUES (?, ?, ?, ?, ?)`,
-  ).bind(sId, id, tokenHash, expiresAt, now);
+  ).bind(sId, id, tokenHash, expiresAt, now).run();
 
   setSessionCookie(c, token, new Date(expiresAt));
 
@@ -108,7 +108,7 @@ auth.post("/login", async (c) => {
   await c.env.DB.prepare(
     `INSERT INTO sessions (id, owner_id, token_hash, expires_at, created_at)
      VALUES (?, ?, ?, ?, ?)`,
-  ).bind(sId, owner.id, tokenHash, expiresAt, now);
+  ).bind(sId, owner.id, tokenHash, expiresAt, now).run();
 
   setSessionCookie(c, token, new Date(expiresAt));
 
