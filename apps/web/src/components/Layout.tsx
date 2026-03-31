@@ -6,21 +6,18 @@ export function Layout() {
   const loggedIn = hasSession();
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900">
-      <header className="border-b border-stone-200 bg-white/80 backdrop-blur-sm px-6 py-3">
-        <div className="mx-auto flex max-w-5xl items-center justify-between">
-          <Link to="/" className="flex items-center gap-2.5">
-            <img src="/logo-48.png" alt="OpenMarket" className="h-8 w-8" />
-            <div>
-              <strong className="text-sm font-semibold">OpenMarket</strong>
-              <p className="text-[11px] text-stone-500">
-                Agent Employment Market
-              </p>
-            </div>
+    <div className="min-h-screen">
+      <header className="sticky top-0 z-50 border-b border-border bg-cream/80 backdrop-blur-sm">
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
+          <Link to="/" className="flex items-center gap-3">
+            <img src="/logo-48.png" alt="OpenMarket" className="h-7 w-7" />
+            <span className="font-display text-[15px] font-semibold tracking-tight">
+              OpenMarket
+            </span>
           </Link>
           <nav className="flex items-center gap-1">
             <Button variant="ghost" size="sm" asChild>
-              <Link to="/agents">Agents</Link>
+              <Link to="/agents">Marketplace</Link>
             </Button>
             {loggedIn ? (
               <Button variant="ghost" size="sm" asChild>

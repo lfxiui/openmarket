@@ -37,18 +37,18 @@ export function Dashboard() {
 
   if (loading) {
     return (
-      <main className="mx-auto max-w-5xl px-6 py-20">
-        <p className="text-stone-500">Loading...</p>
+      <main className="mx-auto max-w-6xl px-6 py-20">
+        <p className="text-ink-muted">Loading...</p>
       </main>
     );
   }
 
   if (!owner) {
     return (
-      <main className="mx-auto max-w-5xl px-6 py-20 text-center">
-        <h1 className="text-2xl font-bold">Not signed in</h1>
-        <p className="mt-2 text-stone-500">
-          <Link to="/login" className="text-orange-500 hover:underline">
+      <main className="mx-auto max-w-6xl px-6 py-20 text-center">
+        <h1 className="font-display text-2xl font-bold">Not signed in</h1>
+        <p className="mt-2 text-ink-light">
+          <Link to="/login" className="text-ink font-medium hover:underline">
             Sign in
           </Link>{" "}
           to access your dashboard.
@@ -58,12 +58,14 @@ export function Dashboard() {
   }
 
   return (
-    <main className="mx-auto max-w-5xl px-6 py-10">
+    <main className="mx-auto max-w-6xl px-6 py-10">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Dashboard</h1>
-          <p className="text-sm text-stone-500">
-            Welcome back, {owner.displayName}
+          <h1 className="font-display text-2xl font-bold tracking-tight">
+            Dashboard
+          </h1>
+          <p className="mt-0.5 text-sm text-ink-muted">
+            {owner.displayName} · {owner.email}
           </p>
         </div>
         <Button
@@ -80,47 +82,47 @@ export function Dashboard() {
       </div>
 
       {/* Wallet */}
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardContent className="p-5">
-            <p className="text-sm text-stone-500">Balance</p>
-            <p className="mt-1 text-3xl font-bold text-orange-500">
+            <p className="text-[13px] text-ink-muted">Balance</p>
+            <p className="mt-1 font-display text-3xl font-bold text-brand-orange">
               {(wallet?.balance ?? 0).toLocaleString()}
             </p>
-            <p className="text-xs text-stone-400">credits</p>
+            <p className="mt-0.5 text-xs text-ink-muted">credits</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-5">
-            <p className="text-sm text-stone-500">In Escrow</p>
-            <p className="mt-1 text-3xl font-bold">
+            <p className="text-[13px] text-ink-muted">In escrow</p>
+            <p className="mt-1 font-display text-3xl font-bold">
               {(wallet?.frozen ?? 0).toLocaleString()}
             </p>
-            <p className="text-xs text-stone-400">credits</p>
+            <p className="mt-0.5 text-xs text-ink-muted">credits</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-5">
-            <p className="text-sm text-stone-500">Total Earned</p>
-            <p className="mt-1 text-3xl font-bold text-teal-600">
+            <p className="text-[13px] text-ink-muted">Earned</p>
+            <p className="mt-1 font-display text-3xl font-bold text-brand-teal">
               {(wallet?.totalEarned ?? 0).toLocaleString()}
             </p>
-            <p className="text-xs text-stone-400">credits</p>
+            <p className="mt-0.5 text-xs text-ink-muted">credits</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-5">
-            <p className="text-sm text-stone-500">Total Spent</p>
-            <p className="mt-1 text-3xl font-bold">
+            <p className="text-[13px] text-ink-muted">Spent</p>
+            <p className="mt-1 font-display text-3xl font-bold">
               {(wallet?.totalSpent ?? 0).toLocaleString()}
             </p>
-            <p className="text-xs text-stone-400">credits</p>
+            <p className="mt-0.5 text-xs text-ink-muted">credits</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Actions */}
-      <div className="mt-8 flex gap-3">
+      <div className="mt-10 flex gap-3">
         <Button asChild>
           <Link to="/dashboard/agents/new">Create agent</Link>
         </Button>
@@ -131,7 +133,7 @@ export function Dashboard() {
             window.location.reload();
           }}
         >
-          Add 10,000 credits (dev)
+          Add 10,000 credits
         </Button>
       </div>
     </main>

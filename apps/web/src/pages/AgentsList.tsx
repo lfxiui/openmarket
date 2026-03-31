@@ -44,15 +44,17 @@ export function AgentsList() {
   }
 
   return (
-    <main className="mx-auto max-w-5xl px-6 py-10">
+    <main className="mx-auto max-w-6xl px-6 py-10">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold">Agent Market</h1>
+        <h1 className="font-display text-2xl font-bold tracking-tight">
+          Marketplace
+        </h1>
         <form onSubmit={handleSearch} className="flex gap-2">
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search agents..."
-            className="w-64"
+            className="w-72"
           />
           <Button variant="secondary" type="submit">
             Search
@@ -61,15 +63,15 @@ export function AgentsList() {
       </div>
 
       {loading ? (
-        <p className="mt-10 text-stone-500">Loading agents...</p>
+        <p className="mt-16 text-center text-ink-muted">Loading agents...</p>
       ) : agents.length === 0 ? (
-        <div className="mt-16 text-center">
-          <p className="text-lg text-stone-500">No agents listed yet.</p>
-          <p className="mt-1 text-sm text-stone-400">
+        <div className="mt-24 text-center">
+          <p className="text-lg text-ink-light">No agents listed yet.</p>
+          <p className="mt-2 text-sm text-ink-muted">
             Be the first to{" "}
             <Link
               to="/dashboard/agents/new"
-              className="text-orange-500 hover:underline"
+              className="text-ink font-medium hover:underline"
             >
               publish one
             </Link>
@@ -77,17 +79,20 @@ export function AgentsList() {
           </p>
         </div>
       ) : (
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {agents.map((agent) => (
-            <Card key={agent.id} className="transition-shadow hover:shadow-md">
+            <Card
+              key={agent.id}
+              className="cursor-pointer hover:border-ink/15"
+            >
               <CardContent className="p-5">
-                <h3 className="font-semibold">{agent.name}</h3>
-                <p className="mt-1 text-sm text-stone-500 line-clamp-2">
+                <h3 className="font-display font-semibold">{agent.name}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-ink-light line-clamp-2">
                   {agent.description}
                 </p>
-                <div className="mt-3 flex items-center gap-2 text-xs text-stone-400">
-                  <span className="rounded-full bg-orange-50 px-2 py-0.5 font-medium text-orange-600">
-                    {agent.pricingAmount} credits / {agent.pricingModel}
+                <div className="mt-3 flex items-center gap-2 text-xs text-ink-muted">
+                  <span className="rounded-full bg-cream-dark px-2.5 py-0.5 font-medium text-ink-light">
+                    {agent.pricingAmount} cr / {agent.pricingModel}
                   </span>
                   {agent.avgRating != null && (
                     <span>★ {agent.avgRating.toFixed(1)}</span>
@@ -95,11 +100,11 @@ export function AgentsList() {
                   <span>{agent.totalTransactions} jobs</span>
                 </div>
                 {agent.tags.length > 0 && (
-                  <div className="mt-2.5 flex flex-wrap gap-1">
+                  <div className="mt-3 flex flex-wrap gap-1.5">
                     {agent.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded bg-stone-100 px-1.5 py-0.5 text-xs text-stone-600"
+                        className="rounded-full border border-border px-2 py-0.5 text-[11px] text-ink-muted"
                       >
                         {tag}
                       </span>

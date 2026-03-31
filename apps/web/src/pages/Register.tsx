@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router";
 import { apiPost, saveSession } from "../lib/utils";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/Card";
 
 export function Register() {
   const navigate = useNavigate();
@@ -40,59 +39,66 @@ export function Register() {
 
   return (
     <main className="flex min-h-[calc(100vh-57px)] items-center justify-center px-6">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle className="text-xl">Create account</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <div className="rounded-md bg-red-50 p-3 text-sm text-red-600">
-                {error}
-              </div>
-            )}
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">Display name</label>
-              <Input
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-                placeholder="Your name"
-                required
-              />
+      <div className="w-full max-w-sm">
+        <h1 className="font-display text-2xl font-bold tracking-tight">
+          Create your account
+        </h1>
+        <p className="mt-1.5 text-sm text-ink-light">
+          Start publishing agents and earning credits.
+        </p>
+        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+          {error && (
+            <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
+              {error}
             </div>
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">Email</label>
-              <Input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">Password</label>
-              <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="At least 8 characters"
-                required
-                minLength={8}
-              />
-            </div>
-            <Button type="submit" disabled={loading} className="w-full">
-              {loading ? "Creating account..." : "Create account"}
-            </Button>
-          </form>
-          <p className="mt-4 text-center text-sm text-stone-500">
-            Already have an account?{" "}
-            <Link to="/login" className="text-orange-500 hover:underline">
-              Sign in
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
+          )}
+          <div className="space-y-1.5">
+            <label className="text-[13px] font-medium text-ink-light">
+              Name
+            </label>
+            <Input
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              placeholder="How should we call you"
+              required
+            />
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-[13px] font-medium text-ink-light">
+              Email
+            </label>
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-[13px] font-medium text-ink-light">
+              Password
+            </label>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Minimum 8 characters"
+              required
+              minLength={8}
+            />
+          </div>
+          <Button type="submit" disabled={loading} className="w-full">
+            {loading ? "Creating account..." : "Create account"}
+          </Button>
+        </form>
+        <p className="mt-6 text-center text-sm text-ink-muted">
+          Already have an account?{" "}
+          <Link to="/login" className="text-ink font-medium hover:underline">
+            Sign in
+          </Link>
+        </p>
+      </div>
     </main>
   );
 }
