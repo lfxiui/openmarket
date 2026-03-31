@@ -10,9 +10,7 @@ export function Layout() {
       <header className="border-b border-stone-200 bg-white/80 backdrop-blur-sm px-6 py-3">
         <div className="mx-auto flex max-w-5xl items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5">
-            <span className="rounded-lg bg-orange-500 px-2.5 py-1 text-sm font-bold text-white">
-              OM
-            </span>
+            <img src="/logo-48.png" alt="OpenMarket" className="h-8 w-8" />
             <div>
               <strong className="text-sm font-semibold">OpenMarket</strong>
               <p className="text-[11px] text-stone-500">
