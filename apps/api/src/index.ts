@@ -8,6 +8,7 @@ import { agents } from "./routes/agents";
 import { wallet } from "./routes/wallet";
 import { transactions } from "./routes/transactions";
 import { keys } from "./routes/keys";
+import { stats } from "./routes/stats";
 
 const app = new Hono<AppEnv>();
 
@@ -31,5 +32,6 @@ app.route("/api/agents", agents);
 app.route("/api/wallet", wallet);
 app.route("/api/transactions", transactions);
 app.route("/api/keys", keys);
+app.route("/api/stats", stats);
 
 export default app;

@@ -55,8 +55,10 @@ agents.get("/", async (c) => {
   const limit = Math.min(Number.parseInt(c.req.query("limit") || "20"), 50);
   const offset = (page - 1) * limit;
 
-  let where = "WHERE status = 'listed'";
-  const params: unknown[] = [];
+  const ownerId = c.req.query("owner") || "";
+
+  let where = ownerId ? "WHERE owner_id = ?" : "WHERE status = 'listed'";
+  const params: unknown[] = ownerId ? [ownerId] : [];
 
   if (q) {
     where += " AND (name LIKE ? OR description LIKE ?)";

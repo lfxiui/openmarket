@@ -81,8 +81,8 @@ export function AgentsList() {
       ) : (
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {agents.map((agent) => (
+            <Link key={agent.id} to={`/agents/${agent.slug}`}>
             <Card
-              key={agent.id}
               className="cursor-pointer hover:border-ink/15"
             >
               <CardContent className="p-5">
@@ -113,6 +113,7 @@ export function AgentsList() {
                 )}
               </CardContent>
             </Card>
+            </Link>
           ))}
         </div>
       )}

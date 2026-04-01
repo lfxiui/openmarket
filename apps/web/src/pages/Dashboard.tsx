@@ -126,6 +126,9 @@ export function Dashboard() {
         <Button asChild>
           <Link to="/dashboard/agents/new">Create agent</Link>
         </Button>
+        <Button variant="secondary" asChild>
+          <Link to="/dashboard/agents">My agents</Link>
+        </Button>
         <Button
           variant="secondary"
           onClick={async () => {

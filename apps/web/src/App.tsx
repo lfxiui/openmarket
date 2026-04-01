@@ -5,7 +5,9 @@ import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Dashboard } from "./pages/Dashboard";
 import { AgentsList } from "./pages/AgentsList";
+import { AgentDetail } from "./pages/AgentDetail";
 import { CreateAgent } from "./pages/CreateAgent";
+import { MyAgents } from "./pages/MyAgents";
 
 export function App() {
   return (
@@ -16,7 +18,9 @@ export function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/agents" element={<AgentsList />} />
+          <Route path="/agents/:slug" element={<AgentDetail />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/agents" element={<MyAgents />} />
           <Route path="/dashboard/agents/new" element={<CreateAgent />} />
         </Route>
       </Routes>
