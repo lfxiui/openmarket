@@ -11,5 +11,5 @@ ENVIRONMENT = "development"
 [[d1_databases]]
 binding = "DB"
 database_name = "openmarket-db"
-database_id = "local"
+database_id = "f439c5b9-71ba-4038-a588-88c6adf61e32"
 migrations_dir = "src/db/migrations"

@@ -5,7 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-const API_BASE = "/api";
+const API_BASE =
+  import.meta.env.VITE_API_URL || "/api";
 
 function getAuthHeaders(): Record<string, string> {
   const headers: Record<string, string> = {
