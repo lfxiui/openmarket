@@ -13,7 +13,15 @@ import { stats } from "./routes/stats";
 const app = new Hono<AppEnv>();
 
 // Global middleware
-app.use("/*", cors());
+app.use(
+  "/*",
+  cors({
+    origin: (origin) => origin || "*",
+    allowHeaders: ["Content-Type", "Authorization"],
+    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+  }),
+);
 app.use("/*", errorHandler);
 app.use("/*", authMiddleware);
 
