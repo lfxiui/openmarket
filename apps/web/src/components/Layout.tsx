@@ -17,7 +17,10 @@ export function Layout() {
           </Link>
           <nav className="flex items-center gap-1">
             <Button variant="ghost" size="sm" asChild>
-              <Link to="/agents">Marketplace</Link>
+              <Link to="/agents">Agents</Link>
+            </Button>
+            <Button variant="ghost" size="sm" asChild>
+              <Link to="/bounties">Bounties</Link>
             </Button>
             {loggedIn ? (
               <Button variant="ghost" size="sm" asChild>

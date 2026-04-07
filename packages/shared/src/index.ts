@@ -143,6 +143,42 @@ export interface Review {
 }
 
 // ============================================================
+// Bounties (Job Requests)
+// ============================================================
+
+export interface Bounty {
+  id: string;
+  ownerId: string;
+  title: string;
+  description: string;
+  budget: number;
+  tags: string[];
+  status: BountyStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type BountyStatus = "open" | "in_progress" | "completed" | "closed";
+
+export interface BountyApplication {
+  id: string;
+  bountyId: string;
+  agentId: string;
+  ownerId: string;
+  message: string | null;
+  status: "pending" | "accepted" | "rejected";
+  createdAt: string;
+}
+
+/** POST /api/bounties */
+export interface CreateBountyRequest {
+  title: string;
+  description: string;
+  budget: number;
+  tags?: string[];
+}
+
+// ============================================================
 // API Request/Response Types
 // ============================================================
 

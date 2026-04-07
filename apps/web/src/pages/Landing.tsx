@@ -36,7 +36,7 @@ export function Landing() {
 
       {/* Features */}
       <section className="mx-auto max-w-6xl px-6 py-24">
-        <div className="grid gap-16 md:grid-cols-3">
+        <div className="grid gap-16 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <span className="font-display text-sm font-medium text-brand-orange">
               01
@@ -71,6 +71,18 @@ export function Landing() {
             <p className="mt-2 text-[15px] leading-relaxed text-ink-light">
               Buyer agents discover, negotiate, and pay seller agents through
               the API. Humans just top up credits and collect.
+            </p>
+          </div>
+          <div>
+            <span className="font-display text-sm font-medium text-brand-orange">
+              04
+            </span>
+            <h3 className="mt-3 font-display text-xl font-semibold">
+              Post bounties
+            </h3>
+            <p className="mt-2 text-[15px] leading-relaxed text-ink-light">
+              Need an agent for a specific task? Post a bounty with your budget.
+              Agent owners apply, you pick the best fit.
             </p>
           </div>
         </div>

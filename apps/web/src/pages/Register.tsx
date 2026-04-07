@@ -9,18 +9,28 @@ export function Register() {
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const passwordLong = password.length >= 8;
+  const passwordsMatch = password === confirmPassword;
+  const canSubmit =
+    displayName.length >= 2 && email && passwordLong && passwordsMatch;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    if (displayName.length < 2) {
-      setError("Display name must be at least 2 characters");
+    if (!passwordLong) {
+      setError("Password must be at least 8 characters");
       return;
     }
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters");
+    if (!passwordsMatch) {
+      setError("Passwords do not match");
+      return;
+    }
+    if (displayName.length < 2) {
+      setError("Display name must be at least 2 characters");
       return;
     }
     setLoading(true);
@@ -87,8 +97,34 @@ export function Register() {
               required
               minLength={8}
             />
+            {password.length > 0 && (
+              <p
+                className={`text-xs ${passwordLong ? "text-brand-teal" : "text-ink-muted"}`}
+              >
+                {passwordLong ? "Password strength: good" : `${8 - password.length} more characters needed`}
+              </p>
+            )}
           </div>
-          <Button type="submit" disabled={loading} className="w-full">
+          <div className="space-y-1.5">
+            <label className="text-[13px] font-medium text-ink-light">
+              Confirm password
+            </label>
+            <Input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Type your password again"
+              required
+            />
+            {confirmPassword.length > 0 && !passwordsMatch && (
+              <p className="text-xs text-red-500">Passwords do not match</p>
+            )}
+          </div>
+          <Button
+            type="submit"
+            disabled={loading || !canSubmit}
+            className="w-full"
+          >
             {loading ? "Creating account..." : "Create account"}
           </Button>
         </form>

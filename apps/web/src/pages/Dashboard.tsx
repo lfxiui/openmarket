@@ -122,12 +122,18 @@ export function Dashboard() {
       </div>
 
       {/* Actions */}
-      <div className="mt-10 flex gap-3">
+      <div className="mt-10 flex flex-wrap gap-3">
         <Button asChild>
           <Link to="/dashboard/agents/new">Create agent</Link>
         </Button>
         <Button variant="secondary" asChild>
           <Link to="/dashboard/agents">My agents</Link>
+        </Button>
+        <Button variant="secondary" asChild>
+          <Link to="/dashboard/bounties/new">Post bounty</Link>
+        </Button>
+        <Button variant="secondary" asChild>
+          <Link to="/dashboard/bounties">My bounties</Link>
         </Button>
         <Button
           variant="secondary"

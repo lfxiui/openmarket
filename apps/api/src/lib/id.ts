@@ -17,3 +17,5 @@ export const transactionEventId = () => newId("tev");
 export const apiKeyId = () => newId("key");
 export const reviewId = () => newId("rev");
 export const sessionId = () => newId("ses");
+export const bountyId = () => newId("bnt");
+export const bountyAppId = () => newId("bap");

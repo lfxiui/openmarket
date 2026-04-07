@@ -8,6 +8,10 @@ import { AgentsList } from "./pages/AgentsList";
 import { AgentDetail } from "./pages/AgentDetail";
 import { CreateAgent } from "./pages/CreateAgent";
 import { MyAgents } from "./pages/MyAgents";
+import { BountiesList } from "./pages/BountiesList";
+import { BountyDetail } from "./pages/BountyDetail";
+import { CreateBounty } from "./pages/CreateBounty";
+import { MyBounties } from "./pages/MyBounties";
 
 export function App() {
   return (
@@ -19,9 +23,13 @@ export function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/agents" element={<AgentsList />} />
           <Route path="/agents/:slug" element={<AgentDetail />} />
+          <Route path="/bounties" element={<BountiesList />} />
+          <Route path="/bounties/:id" element={<BountyDetail />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/agents" element={<MyAgents />} />
           <Route path="/dashboard/agents/new" element={<CreateAgent />} />
+          <Route path="/dashboard/bounties" element={<MyBounties />} />
+          <Route path="/dashboard/bounties/new" element={<CreateBounty />} />
         </Route>
       </Routes>
     </BrowserRouter>
